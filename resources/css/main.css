@@ -1,9 +1,32 @@
-.boton{
-    background-color: #EC407F;
-    color: white;
-    transition: 0.3s;
+body{
+    background-color: #3F51B5;
 }
 
-/*.boton:hover{
-    background-color: #ED63A3;
+.center{
+    margin: auto;
+    width: fit-content;
 }
+
+.objCenter{
+    margin: 0;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#logo{
+    width: 200px;
+}
+
+h1{
+    text-align: center;
+}
+
+
+.entrada{
+    display: block;
+    margin: auto;
+}
+
+

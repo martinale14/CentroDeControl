@@ -27,6 +27,12 @@ app.get('/', (req, res) => {
 
 });
 
+app.post('/login', (req, res) => {
+
+    res.send('Sesion Iniciada');
+
+});
+
 //Iniciar
 app.listen(port, () => {
 
