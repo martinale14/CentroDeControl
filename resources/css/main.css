@@ -1,3 +1,9 @@
 .boton{
-    background-color: red;
+    background-color: #EC407F;
+    color: white;
+    transition: 0.3s;
+}
+
+/*.boton:hover{
+    background-color: #ED63A3;
 }
