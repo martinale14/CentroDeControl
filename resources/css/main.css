@@ -29,4 +29,9 @@ h1{
     margin: auto;
 }
 
+label{
+    color: white !important;
+    opacity: 0.5;
+}
+
 
