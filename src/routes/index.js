@@ -6,8 +6,8 @@ router.get('/', (req, res) => {
 });
 
 
-router.get('/Dashboard', (req, res) => {
-    res.send('Perfil iniciado');
+router.get('/dashboard', (req, res) => {
+    res.render('dashboard.hbs');
 });
 
 module.exports = router;

@@ -43,13 +43,14 @@ app.use(passport.session());
 app.use((req, res, next) => {
     app.locals.success = req.flash('success');
     app.locals.message = req.flash('message');
+    app.locals.user = req.user;
     next();
 });
 
 // Routes
 app.use(require('./routes/index'));
 app.use(require('./routes/authentication'));
-app.use('/links', require('./routes/links'));
+app.use('/dashboard', require('./routes/dashboard'));
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')));

@@ -16,12 +16,10 @@
     "express-handlebars": "^5.1.0",
     "express-session": "^1.17.1",
     "express-validator": "^6.6.1",
-    "flash": "^1.1.0",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "path": "^0.12.7",
     "serve-favicon": "^2.5.0"
   },
   "devDependencies": {

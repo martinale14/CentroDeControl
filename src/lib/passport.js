@@ -14,9 +14,11 @@ passport.use('local.login', new Strategy({
     const rows = await pool.query('SELECT * FROM USUARIOS WHERE CEDULA = ?', [cedula]);
     if(rows.length > 0){
         const user = rows[0];
+        console.log(rows[0]);
         if(contraseña == user.CONTRASENA){
 
-            done(null, user, req.flash('success', 'Bienvenido ' + user.cedula));
+            const nombre = user.NOMBRECOMPLE.split(" ");
+            done(null, user, req.flash('success', 'Bienvenido ' + nombre[0]));
             console.log("iniciado");
 
         }else{
@@ -35,6 +37,6 @@ passport.serializeUser((user, done) => {
   });
   
   passport.deserializeUser(async (id, done) => {
-    const rows = await pool.query('SELECT * FROM USUARIOS WHERE id = ?', [id]);
+    const rows = await pool.query('SELECT * FROM USUARIOS WHERE ID_USUARIO = ?', [id]);
     done(null, rows[0]);
   });
