@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const exphbs = require('express-handlebars');
 const path = require('path');
+const favicon = require('serve-favicon');
 
 // initializations
 const app = express();
@@ -17,6 +18,7 @@ app.engine('.hbs', exphbs({
     helpers: require('./lib/handlebars')    
 }));
 app.set('view engine', '.hbs');
+app.use(favicon(path.join(__dirname, 'public', 'imgs', 'favicon.ico')));
 
 // Middlewares
 app.use(morgan('dev'));
