@@ -1,0 +1,86 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
+USE `mydb` ;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`ZONAS`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `mydb`.`ZONAS` (
+  `ID_ZONA` INT NOT NULL ,
+  `NOMBREC` VARCHAR(45) NOT NULL ,
+  PRIMARY KEY (`ID_ZONA`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`PARADAS_MIO`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `mydb`.`PARADAS_MIO` (
+  `ID_PARADA_MIO` INT NOT NULL ,
+  `DIRECCION` VARCHAR(45) NOT NULL ,
+  `ZONAS_ID_ZONA` INT NOT NULL ,
+  PRIMARY KEY (`ID_PARADA_MIO`) ,
+  INDEX `fk_PARADAS_MIO_ZONAS1_idx` (`ZONAS_ID_ZONA` ASC) ,
+  CONSTRAINT `fk_PARADAS_MIO_ZONAS1`
+    FOREIGN KEY (`ZONAS_ID_ZONA` )
+    REFERENCES `mydb`.`ZONAS` (`ID_ZONA` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`ELEMENTOS_MEDICION`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `mydb`.`ELEMENTOS_MEDICION` (
+  `ID` INT NOT NULL ,
+  `UBICACION` VARCHAR(45) NOT NULL ,
+  `PARADAS_MIO_ID_PARADA_MIO` INT NOT NULL ,
+  PRIMARY KEY (`ID`) ,
+  INDEX `fk_ELEMENTOS_MEDICION_PARADAS_MIO1_idx` (`PARADAS_MIO_ID_PARADA_MIO` ASC) ,
+  CONSTRAINT `fk_ELEMENTOS_MEDICION_PARADAS_MIO1`
+    FOREIGN KEY (`PARADAS_MIO_ID_PARADA_MIO` )
+    REFERENCES `mydb`.`PARADAS_MIO` (`ID_PARADA_MIO` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`MEDICIONES`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `mydb`.`MEDICIONES` (
+  `ID_MEDICION` INT NOT NULL ,
+  `CANTIDAD_PARTICULAS` DOUBLE NOT NULL ,
+  `CALIDAD_AIRE` INT NOT NULL ,
+  `FECHA_HORAD` DATETIME NOT NULL ,
+  `ELEMENTOS_MEDICION_ID` INT NOT NULL ,
+  PRIMARY KEY (`ID_MEDICION`) ,
+  INDEX `fk_MEDICIONES_ELEMENTOS_MEDICION1_idx` (`ELEMENTOS_MEDICION_ID` ASC) ,
+  CONSTRAINT `fk_MEDICIONES_ELEMENTOS_MEDICION1`
+    FOREIGN KEY (`ELEMENTOS_MEDICION_ID` )
+    REFERENCES `mydb`.`ELEMENTOS_MEDICION` (`ID` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`USUARIOS`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `mydb`.`USUARIOS` (
+  `ID_USUARIO` INT NOT NULL ,
+  `NOMBRECOMPLE` VARCHAR(45) NOT NULL ,
+  `CEDULA` VARCHAR(10) NOT NULL ,
+  `CONTRASENA` VARCHAR(45) NOT NULL ,
+  PRIMARY KEY (`ID_USUARIO`) )
+ENGINE = InnoDB;
+
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
