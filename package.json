@@ -4,15 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "npx nodemon index.js"
+    "start": "node src/index.js",
+    "test": "npx nodemon src/"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
-    "ejs": "^3.1.5",
     "express": "^4.17.1",
+    "express-handlebars": "^5.1.0",
+    "express-session": "^1.17.1",
+    "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "path": "^0.12.7",
     "serve-favicon": "^2.5.0"
