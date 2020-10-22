@@ -1,0 +1,11 @@
+dialog {
+    width: 400px !important;
+}
+
+h4{
+    text-align: center;
+}
+
+button{
+    margin: auto !important;
+}

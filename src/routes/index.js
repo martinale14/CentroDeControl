@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const { isLoggedIn } = require('../lib/auth');
+const auth = require('../lib/auth');
 
-router.get('/', async (req, res) => {
+router.get('/', auth.isLoggedOut, async (req, res) => {
     
     res.render('login.hbs');
     
