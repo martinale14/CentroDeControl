@@ -23,9 +23,16 @@ router.post('/', (req, res, next) => {
     })(req, res, next);
 });
 
-router.get('/Dashboard', (req, res) => {
+router.get('/dashboard', isLoggedIn, (req, res, next) => {
 
-    res.send('Welcome to Dashboard');
+    next();
+
+});
+
+router.get('/logout', (req, res) => {
+
+    req.logOut();
+    res.redirect('/');
 
 });
 
