@@ -4,19 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "npx nodemon src/index.js"
+    "start": "node src/index",
+    "test": "npx nodemon src/index"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "connect-flash": "^0.1.1",
     "express": "^4.17.1",
     "express-handlebars": "^5.1.0",
     "express-session": "^1.17.1",
+    "express-validator": "^6.6.1",
+    "flash": "^1.1.0",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "serve-favicon": "^2.5.0"
   },

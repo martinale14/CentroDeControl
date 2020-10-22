@@ -2,6 +2,10 @@ body{
     background-color: #3F51B5;
 }
 
+.container{
+    width: 100%;
+}
+
 .center{
     margin: auto;
     width: fit-content;
@@ -33,5 +37,4 @@ label{
     color: white !important;
     opacity: 0.5;
 }
-
 

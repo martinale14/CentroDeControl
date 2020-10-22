@@ -1,0 +1,57 @@
+{{#if succes}}
+    <dialog class="mdl-dialog">
+        <h4 class="mdl-dialog__title">Allow data collection?</h4>
+        <div class="mdl-dialog__content">
+        <p>
+            {{succes}}
+        </p>
+        </div>
+        <div class="mdl-dialog__actions">
+        <button type="button" class="mdl-button">Agree</button>
+        <button type="button" class="mdl-button close">Disagree</button>
+        </div>
+    </dialog>
+    <script>
+        $(document).ready(() => {
+            console.log('cargo');
+            var dialog = document.querySelector('dialog');
+            if (! dialog.showModal) {
+                dialogPolyfill.registerDialog(dialog);
+            }
+            dialog.showModal();
+            dialog.querySelector('.close').addEventListener('click', function() {
+                dialog.close();
+            });
+        });
+        
+    </script>
+{{/if}}
+
+{{#if message}}
+    <dialog class="mdl-dialog">
+        <h4 class="mdl-dialog__title">Allow data collection?</h4>
+        <div class="mdl-dialog__content">
+        <p>
+            {{message}}
+        </p>
+        </div>
+        <div class="mdl-dialog__actions">
+        <button type="button" class="mdl-button">Agree</button>
+        <button type="button" class="mdl-button close">Disagree</button>
+        </div>
+    </dialog>
+    <script>
+        $(document).ready(() => {
+             console.log('cargo');
+            var dialog = document.querySelector('dialog');
+            if (! dialog.showModal) {
+                dialogPolyfill.registerDialog(dialog);
+            }
+            dialog.showModal();
+            dialog.querySelector('.close').addEventListener('click', function() {
+                dialog.close();
+            });
+        });
+        
+    </script>
+{{/if}}

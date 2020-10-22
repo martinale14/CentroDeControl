@@ -1,11 +1,17 @@
 const express = require('express');
 const morgan = require('morgan');
 const exphbs = require('express-handlebars');
+const session = require('express-session');
 const path = require('path');
 const favicon = require('serve-favicon');
+const passport = require('passport');
+const flash = require('connect-flash');
+const bodyParser = require('body-parser');
 
+const { database } = require('./keys');
 // initializations
 const app = express();
+require('./lib/passport');
 
 // settings
 app.set('port', process.env.PORT || 3000);
@@ -21,13 +27,22 @@ app.set('view engine', '.hbs');
 app.use(favicon(path.join(__dirname, 'public', 'imgs', 'favicon.ico')));
 
 // Middlewares
-app.use(morgan('dev'));
-app.use(express.urlencoded({extended: false}));
-app.use(express.json());
+//app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+app.use(session({
+    secret: 'faztmysqlnodemysql',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Global Variables
 app.use((req, res, next) => {
-
+    app.locals.success = req.flash('success');
+    app.locals.message = req.flash('message');
     next();
 });
 
