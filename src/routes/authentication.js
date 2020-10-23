@@ -25,7 +25,7 @@ router.post('/', (req, res, next) => {
 
 //Colocar isLoggedIn
 
-router.get('/dashboard', (req, res, next) => {
+router.get('/dashboard', isLoggedIn,(req, res, next) => {
 
     next();
 

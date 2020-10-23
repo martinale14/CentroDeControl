@@ -1,14 +1,25 @@
 <head>
     <style>
+        .grids {
+            height: 60px !important;
+        }
 
+        .noPadding {
+            padding: 0;
+        }
+
+        .mdl-cell--2-col {
+            border: solid black !important;
+        }
     </style>
     <script>
-        $(document).ready(()=>{
+        $(document).ready(() => {
 
             const height = window.innerHeight - 80;
-            document.getElementById('cont').style.height = height + 'px'; 
+            document.getElementById('cont').style.height = height + 'px';
 
         });
+
     </script>
 </head>
 
@@ -17,7 +28,7 @@
     <main class="mdl-layout__content mdl-color--grey-100">
         <div class="mdl-grid demo-content" id="cont">
             <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col">
-                <form method="POST" action="/filtrar">
+                <form method="POST" action="/dashboard/buscar">
                     <div class="mdl-textfield mdl-js-textfield">
                         <input class="mdl-textfield__input" type="text" id="sample1" name="latitud">
                         <label class="mdl-textfield__label" for="sample1">latitud...</label>
@@ -27,15 +38,19 @@
                         <label class="mdl-textfield__label" for="sample2">longitud...</label>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="sample1" name="fecha">
-                        <label class="mdl-textfield__label" for="sample1">aa/mm/dd</label>
+                        <input class="mdl-textfield__input" type="text" id="fechaIn" name="fechaIn">
+                        <label class="mdl-textfield__label" for="fechaIn">Fecha Inicio: aa-mm-dd</label>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="sample3" name="HoraInicio">
+                        <input class="mdl-textfield__input" type="text" id="fechaFn" name="fechaFn">
+                        <label class="mdl-textfield__label" for="fechaIn">Fecha Fin: aa-mm-dd</label>
+                    </div>
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" id="horaIn" name="HoraInicio">
                         <label class="mdl-textfield__label" for="sample3">HoraInicio...</label>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="sample4" name="HoraFin">
+                        <input class="mdl-textfield__input" type="text" id="horaFi" name="HoraFin">
                         <label class="mdl-textfield__label" for="sample4">HoraFin...</label>
                     </div>
                     <br>
@@ -46,7 +61,31 @@
                     </button>
                 </form>
             </div>
-            <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col">
+            <div class=" mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col result">
+                <table style="width: 100%;" class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                    <thead>
+                        <tr>
+                            <th class="mdl-data-table__cell--non-numeric">Modulo</th>
+                            <th>Geoposición</th>
+                            <th>PPMillon</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {{#each meds}}
+                        <tr>
+                            <td class="mdl-data-table__cell--non-numeric">{{info.[0].ID}}</td>
+                            <td>{{info.[0].UBICACION}}</td>
+                            
+                            <td>{{this.CANTIDAD_PARTICULAS}}</td>
+                        </tr>
+                        <tr>
+                            <td>{{this.FECHA_HORAD}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+
             </div>
         </div>
     </main>

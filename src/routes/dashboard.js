@@ -7,9 +7,12 @@ const { isLoggedIn } = require('../lib/auth');
 
 //colocar (isLoggedIn)
 
-router.get('/',  async (req, res) => {
+var data = new Array();
+var modulos = new Array();
+var meds = new Array();
 
-    var modulos = new Array();
+router.get('/', isLoggedIn,async (req, res) => {
+
     var parMio = new Array();
     var zonas = new Array();
     var mediciones = new Array();
@@ -23,25 +26,14 @@ router.get('/',  async (req, res) => {
 
 });
 
-router.get('/busqueda',  async (req, res) => {
+router.get('/busqueda',  isLoggedIn,async (req, res) => {
 
-    var modulos = new Array();
-    var parMio = new Array();
-    var zonas = new Array();
-    var mediciones = new Array();
-    modulos = await pool.query('SELECT * FROM ELEMENTOS_MEDICION');
-    for(let i = 0; i < modulos.length; i++){
-        parMio[i] = await pool.query('SELECT * FROM PARADAS_MIO WHERE ID_PARADA_MIO = ?', modulos[i].PARADAS_MIO_ID_PARADA_MIO);
-        zonas[i] = await pool.query('SELECT * FROM ZONAS WHERE ID_ZONA = ?', parMio[0][0].ZONAS_ID_ZONA);
-        mediciones[i] = await pool.query('SELECT * FROM MEDICIONES WHERE ELEMENTOS_MEDICION_ID = ? order by FECHA_HORAD DESC', modulos[i].ID);
-    }
-    res.render('busqueda.hbs', {layout: 'dashboard',modulos, mediciones, parMio, zonas});
+    res.render('busqueda.hbs', {layout: 'dashboard', data, meds});
 
 });
 
-router.get('/mapa',  async (req, res) => {
+router.get('/mapa',  isLoggedIn,async (req, res) => {
 
-    var modulos = new Array();
     var parMio = new Array();
     var zonas = new Array();
     var mediciones = new Array();
@@ -51,8 +43,62 @@ router.get('/mapa',  async (req, res) => {
         zonas[i] = await pool.query('SELECT * FROM ZONAS WHERE ID_ZONA = ?', parMio[0][0].ZONAS_ID_ZONA);
         mediciones[i] = await pool.query('SELECT * FROM MEDICIONES WHERE ELEMENTOS_MEDICION_ID = ? order by FECHA_HORAD DESC', modulos[i].ID);
     }
-    res.render('mapa.hbs', {layout: 'dashboard',modulos, mediciones, parMio, zonas});
+    res.render('mapa.hbs', {layout: 'dashboard',modulos, mediciones, parMio, zonas, meds});
 
+});
+
+router.post('/buscar', isLoggedIn,async(req, res) => {
+
+    const variables = req.body;
+
+    const filtros = {
+
+        'ubicacion' : `${variables.latitud}%,%${variables.longitud}`,
+        'fechaIn': `${variables.fechaIn} ${variables.HoraInicio}`,
+        'fechaFn': `${variables.fechaFn} ${variables.HoraFin}`
+
+    }
+
+    let querySearch;
+
+    if(filtros.fechaIn == ' '){
+
+
+        querySearch = `SELECT * FROM MEDICIONES AS me WHERE (me.FECHA_HORAD < '${filtros.fechaFn}' AND me.ELEMENTOS_MEDICION_ID IN (SELECT ID FROM ELEMENTOS_MEDICION WHERE UBICACION LIKE '%${filtros.ubicacion}%') ) order by me.FECHA_HORAD DESC`;
+
+    }
+    if(filtros.fechaFn == ' '){
+
+        querySearch = `SELECT * FROM MEDICIONES AS me WHERE (me.FECHA_HORAD > '${filtros.fechaIn}' AND me.ELEMENTOS_MEDICION_ID IN (SELECT ID FROM ELEMENTOS_MEDICION WHERE UBICACION LIKE '%${filtros.ubicacion}%') ) order by me.FECHA_HORAD DESC`;
+
+    }
+    if(filtros.fechaIn == ' ' && filtros.fechaFn == ' '){
+
+        querySearch = `SELECT * FROM MEDICIONES AS me WHERE me.ELEMENTOS_MEDICION_ID IN (SELECT ID FROM ELEMENTOS_MEDICION WHERE UBICACION LIKE '%${filtros.ubicacion}%')  order by me.FECHA_HORAD DESC`;
+
+
+    }
+    if(filtros.fechaIn != ' ' && filtros.fechaFn != ' '){
+
+        querySearch = `SELECT * FROM MEDICIONES AS me WHERE ((me.FECHA_HORAD < '${filtros.fechaFn}' AND me.FECHA_HORAD > '${filtros.fechaIn}') AND me.ELEMENTOS_MEDICION_ID IN (SELECT ID FROM ELEMENTOS_MEDICION WHERE UBICACION LIKE '%${filtros.ubicacion}%') ) order by me.FECHA_HORAD DESC`;
+
+
+    }
+
+
+
+
+    meds = await pool.query(querySearch);
+
+    console.log(meds[0]);
+
+    for (let i = 0; i < meds.length; i++) {
+        
+        meds[i].info= await pool.query(`SELECT * FROM ELEMENTOS_MEDICION WHERE ID = ${meds[i].ELEMENTOS_MEDICION_ID}`);
+        
+    }
+
+    res.redirect('/dashboard/busqueda');
 });
 
 module.exports = router;
