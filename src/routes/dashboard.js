@@ -5,7 +5,9 @@ const router = express.Router();
 const pool = require('../database');
 const { isLoggedIn } = require('../lib/auth');
 
-router.get('/', isLoggedIn, async (req, res) => {
+//colocar (isLoggedIn)
+
+router.get('/',  async (req, res) => {
 
     var modulos = new Array();
     var parMio = new Array();
@@ -17,7 +19,6 @@ router.get('/', isLoggedIn, async (req, res) => {
         zonas[i] = await pool.query('SELECT * FROM ZONAS WHERE ID_ZONA = ?', parMio[0][0].ZONAS_ID_ZONA);
         mediciones[i] = await pool.query('SELECT * FROM MEDICIONES WHERE ELEMENTOS_MEDICION_ID = ? order by FECHA_HORAD DESC', modulos[i].ID);
     }
-    console.log(mediciones[0][0].CALIDAD_AIRE);
     res.render('dashboard.hbs', {modulos, mediciones});
 
 });
