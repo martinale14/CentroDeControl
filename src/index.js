@@ -26,7 +26,7 @@ app.set('view engine', '.hbs');
 app.use(favicon(path.join(__dirname, 'public', 'imgs', 'favicon.ico')));
 
 // Middlewares
-//app.use(morgan('dev'));
+app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(session({

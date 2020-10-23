@@ -1,0 +1,54 @@
+<head>
+    <style>
+
+    </style>
+    <script>
+        $(document).ready(()=>{
+
+            const height = window.innerHeight - 80;
+            document.getElementById('cont').style.height = height + 'px'; 
+
+        });
+    </script>
+</head>
+
+<body>
+
+    <main class="mdl-layout__content mdl-color--grey-100">
+        <div class="mdl-grid demo-content" id="cont">
+            <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col">
+                <form method="POST" action="/filtrar">
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" id="sample1" name="latitud">
+                        <label class="mdl-textfield__label" for="sample1">latitud...</label>
+                    </div>
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" id="sample2" name="longitud">
+                        <label class="mdl-textfield__label" for="sample2">longitud...</label>
+                    </div>
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" id="sample1" name="fecha">
+                        <label class="mdl-textfield__label" for="sample1">aa/mm/dd</label>
+                    </div>
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" id="sample3" name="HoraInicio">
+                        <label class="mdl-textfield__label" for="sample3">HoraInicio...</label>
+                    </div>
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" id="sample4" name="HoraFin">
+                        <label class="mdl-textfield__label" for="sample4">HoraFin...</label>
+                    </div>
+                    <br>
+                    <br>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                        type="submit">
+                        Filtrar
+                    </button>
+                </form>
+            </div>
+            <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col">
+            </div>
+        </div>
+    </main>
+    </form>
+</body>
