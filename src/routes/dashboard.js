@@ -47,7 +47,7 @@ router.get('/mapa',  isLoggedIn,async (req, res) => {
 
 });
 
-router.post('/buscar', isLoggedIn,async(req, res) => {
+router.post('/busqueda', isLoggedIn,async(req, res) => {
 
     const variables = req.body;
 
