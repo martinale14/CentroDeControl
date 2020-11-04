@@ -207,8 +207,6 @@
         easing: 'easeInOut'
       });
 
-      console.log('');
-
       circle.animate(parseFloat('{{#with (lookup ../mediciones @index)}}{{this.[0].CALIDAD_AIRE}}{{/with}}') / 5);
 
     }

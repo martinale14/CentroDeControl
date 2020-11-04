@@ -90,8 +90,6 @@ router.post('/busqueda', isLoggedIn,async(req, res) => {
 
     meds = await pool.query(querySearch);
 
-    console.log(meds[0]);
-
     for (let i = 0; i < meds.length; i++) {
         
         meds[i].info= await pool.query(`SELECT * FROM ELEMENTOS_MEDICION WHERE ID = ${meds[i].ELEMENTOS_MEDICION_ID}`);
