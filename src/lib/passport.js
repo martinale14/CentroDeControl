@@ -13,12 +13,27 @@ passport.use('local.login', new Strategy({
 
     const rows = await pool.query('SELECT * FROM USUARIOS WHERE CEDULA = ?', [cedula]);
     if(rows.length > 0){
+        let bienvenida;
         const user = rows[0];
-        console.log(rows[0]);
+        console.log(user);
+        switch(user.SEXUALIDAD){
+
+            case 'm':
+                bienvenida = 'Bienvenido'
+            break;
+            case 'f':
+                bienvenida = 'Bienvenida'
+            break;
+            default:
+                bienvenida = 'Bienvenid@'
+            break;
+
+        }
+
         if(contraseña == user.CONTRASENA){
 
             const nombre = user.NOMBRECOMPLE.split(" ");
-            done(null, user, req.flash('success', 'Bienvenid@ ' + nombre[0]));
+            done(null, user, req.flash('success', `${bienvenida} ${nombre[0]}`));
             console.log("iniciado");
 
         }else{

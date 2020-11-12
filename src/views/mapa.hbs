@@ -1,5 +1,4 @@
 <head>
-
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKxWUQPjC3sD11iewFG7yt3sU91O1_q9s&callback=initMap&libraries=&v=weekly"
@@ -8,10 +7,27 @@
 
     <style>
 
+        @import url('https://fonts.googleapis.com/css2?family=Days+One&display=swap');
+
         #map {
             height: 100%;
         }
 
+        #legend {
+            font-family: 'Days One', sans-serif;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            margin: 10px;
+            border-radius: 25px;
+            color: white;
+            font-size:x-large;
+            font-weight: bold;
+        }
+
+        #legend img {
+            opacity: 1;
+            vertical-align: middle;
+        }
 
     </style>
 
@@ -25,6 +41,15 @@
         });
 
       }
+
+        
+        const icons = {
+             Modulo: {
+                name: 'Modulo',
+                icon: '../imgs/Marker.png'
+            },
+        };
+
     </script>
     {{#each modulos}}
     <script>
@@ -34,10 +59,9 @@
             let pos = '{{this.UBICACION}}';
             let coor = pos.split(',');
 
-            console.log(coor[0] + ':' + coor[1]);
-
             const marker = new google.maps.Marker({
                 position: { lat: parseFloat(coor[0]), lng: parseFloat(coor[1]) },
+                icon: icons['Modulo'].icon,
                 map: map
             });
 
@@ -45,7 +69,23 @@
 
     </script>
     {{/each}}
+    <script>
+        $(document).ready(() => {
+            const legend = document.getElementById("legend");
+
+            for (const key in icons) {
+            const type = icons[key];
+            const name = type.name;
+            const icon = type.icon;
+            const div = document.createElement("div");
+            div.innerHTML = '<img src="' + icon + '"> ' + name;
+            legend.appendChild(div);
+            }
+            map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
+        });
+    </script>
 </head>
 <body>
     <div id="map"></div>
+    <div id="legend"></div>
 </body>

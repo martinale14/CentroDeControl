@@ -38,26 +38,71 @@
 
   {{{head}}}
 
+  <style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Days+One&display=swap');
+    
+    .demo-avatar{
+      width: 35%; 
+      height: auto;
+      margin: auto;
+    }
+
+    .userName{
+      font-weight: bold;
+      font-size: large;
+      text-align: center;
+    }
+
+    .darkBlue{
+      background-color: #465687 !important;
+    }
+
+    .normalBlue{
+      background-color: #4051B5 !important;
+    }
+
+    .darkMode{
+     background-color: rgba(0, 0, 0, 0.8) !important;
+    }
+
+    .material-icons{ 
+      color: rgba(255, 255, 255, 1); 
+      
+      }
+
+      .mdl-layout__drawer-button{
+        background-color: rgba(0, 0, 0, 0)!important;
+      }
+
+  </style>
 </head>
 
 <body>
   {{>message}}
   <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-    <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+    <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600 darkBlue">
+      <div aria-expanded="false" role="button" tabindex="0" class="mdl-layout__drawer-button">
+        <i class="material-icons"></i>
+      </div>
       <div class="mdl-layout__header-row">
-        <span class="mdl-layout-title">Dashboard</span>
+        <span class="mdl-layout-title" style="color:white">Dashboard</span>
         <div class="mdl-layout-spacer"></div>
       </div>
     </header>
     <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
-      <header class="demo-drawer-header">
-        <img src="/imgs/template/user.jpg" class="demo-avatar">
+      <header class="demo-drawer-header normalBlue">
+        {{#ifCond user.SEXUALIDAD 'm'}}
+          <img src="/imgs/template/defaultUserBoy.png" class="demo-avatar">
+        {{else}}
+          <img src="/imgs/template/defaultUserGirl.png" class="demo-avatar">
+        {{/ifCond}}
         <br>
         <div class="demo-avatar-dropdown">
-          <span>{{user.NOMBRECOMPLE}}</span>
+          <span class="userName">{{user.NOMBRECOMPLE}}</span>
         </div>
       </header>
-      <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
+      <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800 darkBlue">
         <a class="mdl-navigation__link" href="/dashboard"><i class="mdl-color-text--blue-grey-400 material-icons"
             role="presentation">home</i>Inicio</a>
         <a class="mdl-navigation__link" href="/dashboard/novedades"><i
