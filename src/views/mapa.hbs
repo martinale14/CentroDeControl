@@ -1,0 +1,51 @@
+<head>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKxWUQPjC3sD11iewFG7yt3sU91O1_q9s&callback=initMap&libraries=&v=weekly"
+      defer
+    ></script>
+
+    <style>
+
+        #map {
+            height: 100%;
+        }
+
+
+    </style>
+
+    <script>
+        let map;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 3.357797, lng: -76.520032 },
+            zoom: 17
+        });
+
+      }
+    </script>
+    {{#each modulos}}
+    <script>
+
+        $(document).ready(() => {
+
+            let pos = '{{this.UBICACION}}';
+            let coor = pos.split(',');
+
+            console.log(coor[0] + ':' + coor[1]);
+
+            const marker = new google.maps.Marker({
+                position: { lat: parseFloat(coor[0]), lng: parseFloat(coor[1]) },
+                map: map
+            });
+
+        });
+
+    </script>
+    {{/each}}
+</head>
+<body>
+    <div id="map"></div>
+</body>

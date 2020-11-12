@@ -18,7 +18,7 @@ passport.use('local.login', new Strategy({
         if(contraseña == user.CONTRASENA){
 
             const nombre = user.NOMBRECOMPLE.split(" ");
-            done(null, user, req.flash('success', 'Bienvenido ' + nombre[0]));
+            done(null, user, req.flash('success', 'Bienvenid@ ' + nombre[0]));
             console.log("iniciado");
 
         }else{

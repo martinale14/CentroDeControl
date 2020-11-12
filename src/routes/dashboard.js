@@ -41,10 +41,16 @@ router.get('/',  isLoggedIn,async (req, res) => {
 
 });
 
-router.get('/mapa',  isLoggedIn, (req, res) => {
+router.get('/mapa',  isLoggedIn, async (req, res) => {
 
     
-    getData();
+    modulos = await pool.query('SELECT * FROM ELEMENTOS_MEDICION');
+    for(let i = 0; i < modulos.length; i++){
+        parMio[i] = await pool.query('SELECT * FROM PARADAS_MIO WHERE ID_PARADA_MIO = ?', modulos[i].PARADAS_MIO_ID_PARADA_MIO);
+        zonas[i] = await pool.query('SELECT * FROM ZONAS WHERE ID_ZONA = ?', parMio[0][0].ZONAS_ID_ZONA);
+        mediciones[i] = await pool.query('SELECT * FROM MEDICIONES WHERE ELEMENTOS_MEDICION_ID = ? order by FECHA_HORAD DESC', modulos[i].ID);
+    }
+
     res.render('mapa.hbs', {layout: 'dashboard',modulos, mediciones, parMio, zonas, meds});
 
 });
@@ -100,16 +106,5 @@ router.post('/', isLoggedIn,async (req, res) => {
 
     res.render('busqueda.hbs', {layout: 'dashboard', data, meds});
 });
-
-async function getData(){
-
-    modulos = await pool.query('SELECT * FROM ELEMENTOS_MEDICION');
-    for(let i = 0; i < modulos.length; i++){
-        parMio[i] = await pool.query('SELECT * FROM PARADAS_MIO WHERE ID_PARADA_MIO = ?', modulos[i].PARADAS_MIO_ID_PARADA_MIO);
-        zonas[i] = await pool.query('SELECT * FROM ZONAS WHERE ID_ZONA = ?', parMio[0][0].ZONAS_ID_ZONA);
-        mediciones[i] = await pool.query('SELECT * FROM MEDICIONES WHERE ELEMENTOS_MEDICION_ID = ? order by FECHA_HORAD DESC', modulos[i].ID);
-    }
-
-}
 
 module.exports = router;
