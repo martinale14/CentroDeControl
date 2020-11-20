@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {body, validationResult} = require('express-validator');
+const name = '';
 
 const passport = require('passport');
 const { isLoggedIn } = require('../lib/auth');
@@ -33,6 +34,8 @@ router.get('/dashboard', isLoggedIn,(req, res, next) => {
 
 router.get('/logout', (req, res) => {
 
+    console.log(req.session.user.NOMBRECOMPLE + ' se ha desconectado');
+    req.session.destroy();
     req.logOut();
     res.redirect('/');
 

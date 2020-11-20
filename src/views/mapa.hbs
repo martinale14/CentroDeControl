@@ -59,10 +59,33 @@
             let pos = '{{this.UBICACION}}';
             let coor = pos.split(',');
 
+            const contentString = '<div id="content">' +
+            `<div id="siteNotice">
+            </div>
+            <h3 id="firstHeading" class="firstHeading">
+                Mod
+                {{this.ID}}:
+                {{#with (lookup ../mediciones @index)}}
+                {{this.[0].CALIDAD_AIRE}}
+                {{/with}}
+            </h3>
+            </div>
+            </div>`;
+
+          const infoWindow = new google.maps.InfoWindow({
+              content: contentString
+          });
+
             const marker = new google.maps.Marker({
                 position: { lat: parseFloat(coor[0]), lng: parseFloat(coor[1]) },
                 icon: icons['Modulo'].icon,
                 map: map
+            });
+
+            marker.addListener('click', () => {
+
+                infoWindow.open(map, marker);
+
             });
 
         });

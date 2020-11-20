@@ -27,6 +27,32 @@
 
     <main class="mdl-layout__content mdl-color--grey-100">
         <div class="mdl-grid demo-content" id="cont">
+            <div class=" mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col result">
+                <table style="width: 100%;" class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                    <thead>
+                        <tr>
+                            <th class="mdl-data-table__cell--non-numeric">Modulo</th>
+                            <th>Geoposición</th>
+                            <th>PPMillon</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {{#each meds}}
+                        <tr>
+                            <td class="mdl-data-table__cell--non-numeric">{{info.[0].ID}}</td>
+                            <td>{{info.[0].UBICACION}}</td>
+                            
+                            <td>{{this.CANTIDAD_PARTICULAS}}</td>
+                        </tr>
+                        <tr>
+                            <td>{{this.FECHA_HORAD}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+
+            </div>
             <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col">
                 <form method="POST" action="/dashboard">
                     <div class="mdl-textfield mdl-js-textfield">
@@ -60,32 +86,6 @@
                         Filtrar
                     </button>
                 </form>
-            </div>
-            <div class=" mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col result">
-                <table style="width: 100%;" class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-                    <thead>
-                        <tr>
-                            <th class="mdl-data-table__cell--non-numeric">Modulo</th>
-                            <th>Geoposición</th>
-                            <th>PPMillon</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {{#each meds}}
-                        <tr>
-                            <td class="mdl-data-table__cell--non-numeric">{{info.[0].ID}}</td>
-                            <td>{{info.[0].UBICACION}}</td>
-                            
-                            <td>{{this.CANTIDAD_PARTICULAS}}</td>
-                        </tr>
-                        <tr>
-                            <td>{{this.FECHA_HORAD}}</td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-
             </div>
         </div>
     </main>

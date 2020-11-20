@@ -1,6 +1,5 @@
 const passport = require('passport');
 const Strategy = require('passport-local').Strategy;
-
 const pool = require('../database');
 
 passport.use('local.login', new Strategy({
@@ -15,7 +14,8 @@ passport.use('local.login', new Strategy({
     if(rows.length > 0){
         let bienvenida;
         const user = rows[0];
-        console.log(user);
+        console.log(user.NOMBRECOMPLE + ' ha ingresado');
+        req.session.user = user;
         switch(user.SEXUALIDAD){
 
             case 'm':
@@ -34,14 +34,14 @@ passport.use('local.login', new Strategy({
 
             const nombre = user.NOMBRECOMPLE.split(" ");
             done(null, user, req.flash('success', `${bienvenida} ${nombre[0]}`));
-            console.log("iniciado");
 
         }else{
+
             done(null, false, req.flash('message', 'Contraseña Incorrecta'));
-            console.log("no contraseña");
+
         }
     }else {
-        console.log("user x");
+
         return done(null, false, req.flash('message', 'El usuario no existe'));
     }
 
@@ -55,3 +55,4 @@ passport.serializeUser((user, done) => {
     const rows = await pool.query('SELECT * FROM USUARIOS WHERE ID_USUARIO = ?', [id]);
     done(null, rows[0]);
   });
+
