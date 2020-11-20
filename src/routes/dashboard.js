@@ -29,7 +29,7 @@ router.get('/novedades', isLoggedIn, async (req, res) => {
 
 router.get('/',  isLoggedIn,async (req, res) => {
 
-    meds = await pool.query('SELECT * FROM MEDICIONES ORDER BY FECHA_HORAD DESC');
+    meds = await pool.query('SELECT * FROM MEDICIONES ORDER BY FECHA_HORAD ASC');
 
     for (let i = 0; i < meds.length; i++) {
         
@@ -37,7 +37,9 @@ router.get('/',  isLoggedIn,async (req, res) => {
         
     }
 
-    res.render('busqueda.hbs', {layout: 'dashboard', data, meds});
+    modulos = await pool.query('SELECT * FROM ELEMENTOS_MEDICION');
+
+    res.render('busqueda.hbs', {layout: 'dashboard', modulos, meds});
 
 });
 
@@ -72,39 +74,61 @@ router.post('/', isLoggedIn,async (req, res) => {
     if(filtros.fechaIn == ' '){
 
 
-        querySearch = `SELECT * FROM MEDICIONES AS me WHERE (me.FECHA_HORAD < '${filtros.fechaFn}' AND me.ELEMENTOS_MEDICION_ID IN (SELECT ID FROM ELEMENTOS_MEDICION WHERE UBICACION LIKE '%${filtros.ubicacion}%') ) order by me.FECHA_HORAD DESC`;
+        querySearch = `SELECT * FROM MEDICIONES AS me WHERE (me.FECHA_HORAD < '${filtros.fechaFn}' AND me.ELEMENTOS_MEDICION_ID IN (SELECT ID FROM ELEMENTOS_MEDICION WHERE UBICACION LIKE '%${filtros.ubicacion}%') ) order by me.FECHA_HORAD ASC`;
 
     }
     if(filtros.fechaFn == ' '){
 
-        querySearch = `SELECT * FROM MEDICIONES AS me WHERE (me.FECHA_HORAD > '${filtros.fechaIn}' AND me.ELEMENTOS_MEDICION_ID IN (SELECT ID FROM ELEMENTOS_MEDICION WHERE UBICACION LIKE '%${filtros.ubicacion}%') ) order by me.FECHA_HORAD DESC`;
+        querySearch = `SELECT * FROM MEDICIONES AS me WHERE (me.FECHA_HORAD > '${filtros.fechaIn}' AND me.ELEMENTOS_MEDICION_ID IN (SELECT ID FROM ELEMENTOS_MEDICION WHERE UBICACION LIKE '%${filtros.ubicacion}%') ) order by me.FECHA_HORAD ASC`;
 
     }
     if(filtros.fechaIn == ' ' && filtros.fechaFn == ' '){
 
-        querySearch = `SELECT * FROM MEDICIONES AS me WHERE me.ELEMENTOS_MEDICION_ID IN (SELECT ID FROM ELEMENTOS_MEDICION WHERE UBICACION LIKE '%${filtros.ubicacion}%')  order by me.FECHA_HORAD DESC`;
+        querySearch = `SELECT * FROM MEDICIONES AS me WHERE me.ELEMENTOS_MEDICION_ID IN (SELECT ID FROM ELEMENTOS_MEDICION WHERE UBICACION LIKE '%${filtros.ubicacion}%')  order by me.FECHA_HORAD ASC`;
 
 
     }
     if(filtros.fechaIn != ' ' && filtros.fechaFn != ' '){
 
-        querySearch = `SELECT * FROM MEDICIONES AS me WHERE ((me.FECHA_HORAD < '${filtros.fechaFn}' AND me.FECHA_HORAD > '${filtros.fechaIn}') AND me.ELEMENTOS_MEDICION_ID IN (SELECT ID FROM ELEMENTOS_MEDICION WHERE UBICACION LIKE '%${filtros.ubicacion}%') ) order by me.FECHA_HORAD DESC`;
+        querySearch = `SELECT * FROM MEDICIONES AS me WHERE ((me.FECHA_HORAD < '${filtros.fechaFn}' AND me.FECHA_HORAD > '${filtros.fechaIn}') AND me.ELEMENTOS_MEDICION_ID IN (SELECT ID FROM ELEMENTOS_MEDICION WHERE UBICACION LIKE '%${filtros.ubicacion}%') ) order by me.FECHA_HORAD ASC`;
 
 
     }
 
-
-
+    modulos = [];
 
     meds = await pool.query(querySearch);
 
     for (let i = 0; i < meds.length; i++) {
         
         meds[i].info= await pool.query(`SELECT * FROM ELEMENTOS_MEDICION WHERE ID = ${meds[i].ELEMENTOS_MEDICION_ID}`);
+        modulos.push(meds[i].info[0].ID);
         
     }
 
-    res.render('busqueda.hbs', {layout: 'dashboard', data, meds});
+    modulos = modulos.filter((value, index, self) => {
+
+        return self.indexOf(value) === index;
+
+    });
+
+    modulos.sort((a, b) => {
+
+        return a -b;
+
+    });
+
+    for(let i = 0; i < modulos.length; i++){
+
+        modulos[i] = {
+            ID: modulos[i]
+        }
+
+    }
+
+    console.log(modulos);
+
+    res.render('busqueda.hbs', {layout: 'dashboard', modulos, meds});
 });
 
 module.exports = router;

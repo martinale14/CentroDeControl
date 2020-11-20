@@ -12,6 +12,7 @@
             border: solid black !important;
         }
     </style>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
         $(document).ready(() => {
 
@@ -20,7 +21,71 @@
 
         });
 
+        var datos =[
+            [
+            ['ID_MEDICION', 'PPM']
+            ],
+            [
+            ['ID_MEDICION', 'PPM']
+            ],
+            [
+            ['ID_MEDICION', 'PPM']
+            ],
+            [
+            ['ID_MEDICION', 'PPM']
+            ],
+            [
+            ['ID_MEDICION', 'PPM']
+            ],
+            [
+            ['ID_MEDICION', 'PPM']
+            ],
+            [
+            ['ID_MEDICION', 'PPM']
+            ],
+            [
+            ['ID_MEDICION', 'PPM']
+            ],
+            [
+            ['ID_MEDICION', 'PPM']
+            ],
+            [
+            ['ID_MEDICION', 'PPM']
+            ],
+            
+        ]
+
     </script>
+    {{#each meds}}
+    <script>
+        datos[parseInt('{{this.ELEMENTOS_MEDICION_ID}}')].push(['{{meds.ID_MEDICION}}',  parseFloat('{{this.CANTIDAD_PARTICULAS}}')]);
+    </script>
+    {{/each}}
+    {{#each modulos}}
+    <script>
+        google.charts.load('current', {'packages':['corechart']});
+
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            // Create the data table.
+            var data = google.visualization.arrayToDataTable(datos[parseInt('{{this.ID}}')]);
+
+            // Set chart options
+            var options = {
+                title: 'Mediciones-Modulo-{{this.ID}}',
+                curveType: 'function',
+                legend: {position: 'bottom'}
+                };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div{{@index}}'));
+            chart.draw(data, options);
+
+        }
+    </script>
+    {{/each}}
 </head>
 
 <body>
@@ -28,6 +93,9 @@
     <main class="mdl-layout__content mdl-color--grey-100">
         <div class="mdl-grid demo-content" id="cont">
             <div class=" mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col result">
+                {{#each modulos}}
+                <div id="chart_div{{@index}}" style="width: 100%; height: 500px"></div>
+                {{/each}}
                 <table style="width: 100%;" class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
                     <thead>
                         <tr>
