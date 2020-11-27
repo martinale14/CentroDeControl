@@ -1,4 +1,5 @@
 const express = require('express');
+const {body, validationResult} = require('express-validator');
 const app = express();
 const router = express.Router();
 
@@ -29,7 +30,7 @@ router.get('/novedades', isLoggedIn, async (req, res) => {
 
 router.get('/',  isLoggedIn,async (req, res) => {
 
-    meds = await pool.query('SELECT * FROM MEDICIONES ORDER BY FECHA_HORAD ASC');
+    meds = await pool.query('SELECT * FROM MEDICIONES ORDER BY ID_MEDICION ASC');
 
     for (let i = 0; i < meds.length; i++) {
         
@@ -60,6 +61,26 @@ router.get('/mapa',  isLoggedIn, async (req, res) => {
 router.post('/', isLoggedIn,async (req, res) => {
 
     const variables = req.body;
+
+    if(variables.fechaIn != '' && variables.HoraInicio == ''){
+
+        variables.HoraInicio = '00:00';
+
+    }else if (variables.fechaIn == '' && variables.HoraInicio != ''){
+
+        variables.fechaIn = '2020-1-1'
+
+    }
+
+    if(variables.fechaFn != '' && variables.HoraFin == ''){
+
+        variables.HoraFin = '23:59';
+
+    }else if (variables.fechaFn == '' && variables.HoraFin != ''){
+
+        variables.fechaIn = '3000-1-1'
+
+    }
 
     const filtros = {
 
@@ -114,7 +135,7 @@ router.post('/', isLoggedIn,async (req, res) => {
 
     modulos.sort((a, b) => {
 
-        return a -b;
+        return a - b;
 
     });
 

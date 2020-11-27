@@ -11,6 +11,16 @@
         .mdl-cell--2-col {
             border: solid black !important;
         }
+
+        .upSide {
+
+            height:550px !important;
+
+        }
+
+        .mdl-grid {
+            height: fit-content !important;
+        }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
@@ -21,107 +31,57 @@
 
         });
 
-        var datos =[
-            [
-            ['ID_MEDICION', 'PPM']
-            ],
-            [
-            ['ID_MEDICION', 'PPM']
-            ],
-            [
-            ['ID_MEDICION', 'PPM']
-            ],
-            [
-            ['ID_MEDICION', 'PPM']
-            ],
-            [
-            ['ID_MEDICION', 'PPM']
-            ],
-            [
-            ['ID_MEDICION', 'PPM']
-            ],
-            [
-            ['ID_MEDICION', 'PPM']
-            ],
-            [
-            ['ID_MEDICION', 'PPM']
-            ],
-            [
-            ['ID_MEDICION', 'PPM']
-            ],
-            [
-            ['ID_MEDICION', 'PPM']
-            ],
-            
-        ]
+        var datos = [['Fecha', 'Modulo 1', 'Modulo 2', 'Modulo 3', 'Modulo 4', 'Modulo 5', 'Modulo 6', 'Modulo 7', 'Modulo 8', 'Modulo 9', 'Modulo 10']];
+
 
     </script>
     {{#each meds}}
     <script>
-        datos[parseInt('{{this.ELEMENTOS_MEDICION_ID}}')].push(['{{meds.ID_MEDICION}}',  parseFloat('{{this.CANTIDAD_PARTICULAS}}')]);
+        datos[(parseInt('{{@index}}')) + 1] = ['{{this.ID_MEDICION}}', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        datos[(parseInt('{{@index}}')) + 1][parseInt('{{this.ELEMENTOS_MEDICION_ID}}')] = parseFloat('{{this.CANTIDAD_PARTICULAS}}');
+        console.log('{{this.ELEMENTOS_MEDICION_ID}}');
     </script>
     {{/each}}
-    {{#each modulos}}
+
     <script>
-        google.charts.load('current', {'packages':['corechart']});
+
+        google.charts.load('current', { 'packages': ['corechart'] });
 
         google.charts.setOnLoadCallback(drawChart);
 
         function drawChart() {
 
             // Create the data table.
-            var data = google.visualization.arrayToDataTable(datos[parseInt('{{this.ID}}')]);
+            var data = google.visualization.arrayToDataTable(datos);
 
             // Set chart options
             var options = {
                 title: 'Mediciones-Modulo-{{this.ID}}',
                 curveType: 'function',
-                legend: {position: 'bottom'}
-                };
+                legend: { position: 'bottom' }
+            };
 
             // Instantiate and draw our chart, passing in some options.
-            var chart = new google.visualization.LineChart(document.getElementById('chart_div{{@index}}'));
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
             chart.draw(data, options);
 
         }
     </script>
-    {{/each}}
+
 </head>
 
 <body>
 
     <main class="mdl-layout__content mdl-color--grey-100">
-        <div class="mdl-grid demo-content" id="cont">
-            <div class=" mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col result">
-                {{#each modulos}}
-                <div id="chart_div{{@index}}" style="width: 100%; height: 500px"></div>
-                {{/each}}
-                <table style="width: 100%;" class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-                    <thead>
-                        <tr>
-                            <th class="mdl-data-table__cell--non-numeric">Modulo</th>
-                            <th>Geoposición</th>
-                            <th>PPMillon</th>
-                        </tr>
-                    </thead>
+        <div class="mdl-grid" id="cont">
+            <div class=" mdl-shadow--2dp mdl-color--white upSide mdl-cell mdl-cell--7-col result">
 
-                    <tbody>
-                        {{#each meds}}
-                        <tr>
-                            <td class="mdl-data-table__cell--non-numeric">{{info.[0].ID}}</td>
-                            <td>{{info.[0].UBICACION}}</td>
-                            
-                            <td>{{this.CANTIDAD_PARTICULAS}}</td>
-                        </tr>
-                        <tr>
-                            <td>{{this.FECHA_HORAD}}</td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
+                <div id="chart_div" style="width: 100%; height: 500px"></div>
+
+
 
             </div>
-            <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col">
+            <div class="demo-graphs mdl-shadow--2dp upSide mdl-color--white mdl-cell mdl-cell--5-col">
                 <form method="POST" action="/dashboard">
                     <div class="mdl-textfield mdl-js-textfield">
                         <input class="mdl-textfield__input" type="text" id="sample1" name="latitud">
@@ -131,21 +91,21 @@
                         <input class="mdl-textfield__input" type="text" id="sample2" name="longitud">
                         <label class="mdl-textfield__label" for="sample2">longitud...</label>
                     </div>
-                    <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="fechaIn" name="fechaIn">
-                        <label class="mdl-textfield__label" for="fechaIn">Fecha Inicio: aa-mm-dd</label>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label has-placeholder">
+                        <input class="mdl-textfield__input" type="date" id="fechaIn" name="fechaIn">
+                        <label class="mdl-textfield__label" for="fechaIn">Fecha de Inicio:</label>
                     </div>
-                    <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="fechaFn" name="fechaFn">
-                        <label class="mdl-textfield__label" for="fechaIn">Fecha Fin: aa-mm-dd</label>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label has-placeholder">
+                        <input class="mdl-textfield__input" type="date" id="fechaFn" name="fechaFn">
+                        <label class="mdl-textfield__label" for="fechaFn">Fecha de Fin:</label>
                     </div>
-                    <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="horaIn" name="HoraInicio">
-                        <label class="mdl-textfield__label" for="sample3">HoraInicio...</label>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label has-placeholder">
+                        <input class="mdl-textfield__input" type="time" id="horaIn" name="HoraInicio">
+                        <label class="mdl-textfield__label" for="HoraInicio">Hora de Inicio:</label>
                     </div>
-                    <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="horaFi" name="HoraFin">
-                        <label class="mdl-textfield__label" for="sample4">HoraFin...</label>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label has-placeholder">
+                        <input class="mdl-textfield__input" type="time" id="horaFi" name="HoraFin">
+                        <label class="mdl-textfield__label" for="HoraFin">Hora de Fin:</label>
                     </div>
                     <br>
                     <br>
@@ -156,6 +116,38 @@
                 </form>
             </div>
         </div>
+        <div class="mdl-grid demo-content" id="cont" style="width: 80%;">
+            <div class=" mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col result">
+                    <table style="width: 100%;" class="mdl-data-table mdl-js-data-table">
+                        <col style="width:1%">
+                        <col style="width:10%">
+                        <col style="width:10%">
+                        <col style="width:79%">
+                        <thead>
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric">Modulo</th>
+                                <th>Geoposición</th>
+                                <th>PPMillon</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {{#each meds}}
+                            <tr>
+                                <td class="mdl-data-table__cell--non-numeric">{{info.[0].ID}}</td>
+                                <td>{{info.[0].UBICACION}}</td>
+                                <td>{{this.CANTIDAD_PARTICULAS}}</td>
+                                <td>{{this.FECHA_HORAD}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+
+            </div>
+        </div>
     </main>
-    </form>
+
+
+
 </body>
