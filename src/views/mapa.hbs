@@ -63,12 +63,16 @@
             `<div id="siteNotice">
             </div>
             <h3 id="firstHeading" class="firstHeading">
-                Mod
+                Modulo
                 {{this.ID}}:
-                {{#with (lookup ../mediciones @index)}}
-                {{this.[0].CALIDAD_AIRE}}
-                {{/with}}
+                
             </h3>
+            <h4>
+                {{#with (lookup ../mediciones @index)}}
+                {{this.[0].CANTIDAD_PARTICULAS}}
+                {{/with}}
+                ppm
+            </h4>    
             </div>
             </div>`;
 

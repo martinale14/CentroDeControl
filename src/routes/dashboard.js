@@ -24,13 +24,18 @@ router.get('/novedades', isLoggedIn, async (req, res) => {
         zonas[i] = await pool.query('SELECT * FROM ZONAS WHERE ID_ZONA = ?', parMio[0][0].ZONAS_ID_ZONA);
         mediciones[i] = await pool.query('SELECT * FROM MEDICIONES WHERE ELEMENTOS_MEDICION_ID = ? order by FECHA_HORAD DESC', modulos[i].ID);
     }
-    res.render('inicio', {layout: 'dashboard',modulos, mediciones, parMio, zonas});
+
+    meds = await pool.query('SELECT * FROM MEDICIONES ORDER BY FECHA_HORAD DESC');
+
+    console.log(meds);
+    
+    res.render('inicio', {layout: 'dashboard',modulos, mediciones, parMio, zonas, meds});
 
 });
 
 router.get('/',  isLoggedIn,async (req, res) => {
 
-    meds = await pool.query('SELECT * FROM MEDICIONES ORDER BY ID_MEDICION ASC');
+    meds = await pool.query('SELECT * FROM MEDICIONES ORDER BY FECHA_HORAD ASC');
 
     for (let i = 0; i < meds.length; i++) {
         
