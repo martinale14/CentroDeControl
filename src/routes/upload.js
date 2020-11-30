@@ -52,12 +52,35 @@ function getFecha(){
 
     let date = new Date();
 
-    let fDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    let options = {
+        timeZone: 'America/New_York',
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hour12: false,
+      },
+      formatter = new Intl.DateTimeFormat([], options);
 
-    console.log(fDate);
+    let fecha = (formatter.format(date)).toString();
+
+    console.log(fecha);  
+    
+    console.log(date);
+
+    let fDate = fecha.replace(',', '').replace(' PM', '').replace(' AM', '').replace('/', '-').replace('/', '-');
+
+    fDate = fDate.split(' ');
+
+    eca = fDate[0].split('-');
+
+    fDate = `${eca[2]}-${eca[0]}-${eca[1]} ${fDate[1]}`;
 
     return fDate;
 
 }
+
 
 module.exports = router;

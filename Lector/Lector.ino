@@ -5,9 +5,9 @@
 #include <MQ135.h>
 
 #define ANALOGPIN A0
-#define RZERO 206.85  
+#define RZERO 206 
 
-int counter = 0;
+int currentTime = 0;
 
 MQ135 gasSensor = MQ135(ANALOGPIN);
 LedControl matriz = LedControl(14, 13, 12, 1);
@@ -66,6 +66,8 @@ void setup(){
 
 void loop(){
 
+  
+
   //Obtenemos las particulas por millon 
   float ppm = gasSensor.getPPM();
 
@@ -93,17 +95,15 @@ void loop(){
     
   }
 
-/*
-  Serial.print("Distancia de objeto mas cercano: ");
-  Serial.println(distancia);
-  delay(250);
-  Serial.print("PPM Valor: ");
+  if((currentTime % 300000) == 0){
+    
+    uploadData(ppm);
+    
+  }
+
+  currentTime = millis();
+
   Serial.println(ppm);
-  delay(250);
-  */
-
-  uploadData(ppm);
-
 }
 
 void representar(byte *Datos,int retardo) {
@@ -159,27 +159,21 @@ void conectarWifi() {
 }
 
 void uploadData(float ppm){
-  
-  if(counter == 0){
 
-    counter = 1;
-
-    if(WiFi.status()==WL_CONNECTED){
-      
-      char serverAddress[] = "192.168.20.27";
-      int port = 3000;
-      
-      WiFiClient wifi;
-      HttpClient http = HttpClient(wifi, serverAddress, port);
-
-      String contentType = "application/x-www-form-urlencoded";
-      String postData = "modulo=1&ppm=" + String(ppm);
-
-      http.post("/upload", contentType, postData);
-      
-    }
+  if(WiFi.status()==WL_CONNECTED){
     
-  }  
+    char serverAddress[] = "52.87.255.19";
+    int port = 3000;
+    
+    WiFiClient wifi;
+    HttpClient http = HttpClient(wifi, serverAddress, port);
+
+    String contentType = "application/x-www-form-urlencoded";
+    String postData = "modulo=1&ppm=" + String(ppm);
+
+    http.post("/upload", contentType, postData);
+    
+  } 
   
 }
  
