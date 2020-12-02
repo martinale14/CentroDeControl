@@ -31,20 +31,38 @@
 
         });
 
-        var datos = [['Fecha', 'Modulo 1', 'Modulo 2', 'Modulo 3', 'Modulo 4', 'Modulo 5', 'Modulo 6', 'Modulo 7', 'Modulo 8', 'Modulo 9', 'Modulo 10']];
+        var ct = 0;
 
+    </script>
+    {{#each modulos}}
+    <script>
+        ct++;
+    </script>
+    {{/each}}
+    <script>
+        var datos = [['Fecha']];
+        for(let i = 0;  i < ct; i++){
 
+            datos[0][i+1] = `Modulo${i+1}`;
+
+        }
     </script>
     {{#each meds}}
     <script>
-        datos[(parseInt('{{@index}}')) + 1] = ['{{this.ID_MEDICION}}', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        datos[(parseInt('{{@index}}')) + 1] = ['{{this.FECHA_HORAD}}'];
+        for(let i = 0;  i < ct; i++){
+
+            datos[(parseInt('{{@index}}')) + 1][i+1] = 0;
+
+        }
         datos[(parseInt('{{@index}}')) + 1][parseInt('{{this.ELEMENTOS_MEDICION_ID}}')] = parseFloat('{{this.CANTIDAD_PARTICULAS}}');
-        console.log('{{this.ELEMENTOS_MEDICION_ID}}');
+       
     </script>
     {{/each}}
 
     <script>
 
+        console.log(ct);
         google.charts.load('current', { 'packages': ['corechart'] });
 
         google.charts.setOnLoadCallback(drawChart);
@@ -62,7 +80,7 @@
             };
 
             // Instantiate and draw our chart, passing in some options.
-            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+            var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
             chart.draw(data, options);
 
         }
