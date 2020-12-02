@@ -53,7 +53,7 @@ function getFecha(){
     let date = new Date();
 
     let options = {
-        timeZone: 'America/New_York',
+        timeZone: 'America/Bogota',
         year: 'numeric',
         month: 'numeric',
         day: 'numeric',
