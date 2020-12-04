@@ -1,15 +1,35 @@
-#include <Arduino_JSON.h>
-#include <ESP8266WiFi.h>
 #include <ArduinoHttpClient.h>
-#include <LedControlMS.h>
-#include <MQ135.h>
+#include <LedControl.h>
+#include <ESP8266WiFi.h>
 
-#define ANALOGPIN A0
-#define RZERO 206 
+const int MQ_PIN = A0;      // Pin del sensor
+const int RL_VALUE = 20;      // Resistencia RL del modulo en Kilo ohms
+const int R0 = 5;          // Resistencia R0 del sensor en Kilo ohms RS/R0 = 3.6ppm
+ 
+// Datos para lectura multiple
+const int READ_SAMPLE_INTERVAL = 100;    // Tiempo entre muestras
+const int READ_SAMPLE_TIMES = 5;       // Numero muestras
+ 
+// Ajustar estos valores para vuestro sensor según el Datasheet
+// (opcionalmente, según la calibración que hayáis realizado)
+const float X0 = 10;
+const float Y0 = 2.2;
+const float X1 = 200;
+const float Y1 = 0.8;
+ 
+// Puntos de la curva de concentración {X, Y}
+const float punto0[] = { log10(X0), log10(Y0) };
+const float punto1[] = { log10(X1), log10(Y1) };
+ 
+// Calcular pendiente y coordenada abscisas
+const float scope = (punto1[1] - punto0[1]) / (punto1[0] - punto0[0]);
+const float coord = punto0[1] - punto0[0] * scope;
+float ppm = 0;
 
 int currentTime = 0;
+int reference = 0;
+int interval = 20000;
 
-MQ135 gasSensor = MQ135(ANALOGPIN);
 LedControl matriz = LedControl(14, 13, 12, 1);
 const int buzPin = 0;
 const int trigPin = 16;
@@ -66,11 +86,19 @@ void setup(){
 
 void loop(){
 
-  
-
   //Obtenemos las particulas por millon 
-  float ppm = gasSensor.getPPM();
+  float rs_med = readMQ(MQ_PIN);      // Obtener la Rs promedio
+  ppm = getConcentration(rs_med/R0);   // Obtener la concentración
 
+  if(ppm >= 1000){
+
+      ppm = 1000;
+    
+    }
+   
+   // Mostrar el valor de la concentración por serial
+   Serial.println("Concentración: ");
+   Serial.println(String(ppm));
   //Calculamos la distancia del objeto mas cercano
   distancia = getDistance();
 
@@ -95,15 +123,15 @@ void loop(){
     
   }
 
-  if((currentTime % 300000) == 0){
-    
+  if(currentTime >= reference){
+
+    reference += interval;
     uploadData(ppm);
     
   }
 
   currentTime = millis();
 
-  Serial.println(ppm);
 }
 
 void representar(byte *Datos,int retardo) {
@@ -130,6 +158,8 @@ float getDistance() {
   duracion = pulseIn(echoPin, HIGH)/2;
 
   dis = duracion*0.0344;
+
+  Serial.println(dis);
 
   return dis; 
   
@@ -162,7 +192,7 @@ void uploadData(float ppm){
 
   if(WiFi.status()==WL_CONNECTED){
     
-    char serverAddress[] = "52.87.255.19";
+    char serverAddress[] = "54.173.63.211";
     int port = 3000;
     
     WiFiClient wifi;
@@ -175,5 +205,33 @@ void uploadData(float ppm){
     
   } 
   
+}
+
+// Obtener la resistencia promedio en N muestras
+float readMQ(int mq_pin)
+{
+   float rs = 0;
+   for (int i = 0;i<READ_SAMPLE_TIMES;i++) {
+      rs += getMQResistance(analogRead(mq_pin));
+      delay(READ_SAMPLE_INTERVAL);
+   }
+   return rs / READ_SAMPLE_TIMES;
+}
+ 
+// Obtener resistencia a partir de la lectura analogica
+float getMQResistance(int raw_adc)
+{
+  if(raw_adc >= 1023 ){
+
+      raw_adc = 1022;
+    
+    }
+   return (((float)RL_VALUE / 1000.0*(1023 - raw_adc) / raw_adc));
+}
+ 
+// Obtener concentracion 10^(coord + scope * log (rs/r0)
+float getConcentration(float rs_ro_ratio)
+{
+   return pow(10, coord + scope * log(rs_ro_ratio));
 }
  
