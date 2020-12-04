@@ -30,7 +30,7 @@ function getCalidad(data) {
 
         cAire = 4
 
-    }else if (data.ppm > 40 && data.ppm <= 600){
+    }else if (data.ppm > 400 && data.ppm <= 600){
 
         cAire = 3
 

@@ -58,12 +58,12 @@
 
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
-          ['Modulo#', 'Particulas por Millon'],
-          ['Modulo {{this.[0].ELEMENTOS_MEDICION_ID}}',  parseFloat('{{this.[0].CANTIDAD_PARTICULAS}}')],
-          ['Modulo {{this.[1].ELEMENTOS_MEDICION_ID}}',  parseFloat('{{this.[1].CANTIDAD_PARTICULAS}}')],
-          ['Modulo {{this.[2].ELEMENTOS_MEDICION_ID}}',  parseFloat('{{this.[2].CANTIDAD_PARTICULAS}}')],
-          ['Modulo {{this.[3].ELEMENTOS_MEDICION_ID}}',  parseFloat('{{this.[3].CANTIDAD_PARTICULAS}}')],
-          ['Modulo {{this.[4].ELEMENTOS_MEDICION_ID}}',  parseFloat('{{this.[4].CANTIDAD_PARTICULAS}}')]
+          ['Fecha', 'Particulas por Millon'],
+          ['{{this.[4].FECHA_HORAD}}',  parseFloat('{{this.[4].CANTIDAD_PARTICULAS}}')],
+          ['{{this.[3].FECHA_HORAD}}',  parseFloat('{{this.[3].CANTIDAD_PARTICULAS}}')],
+          ['{{this.[2].FECHA_HORAD}}',  parseFloat('{{this.[2].CANTIDAD_PARTICULAS}}')],
+          ['{{this.[1].FECHA_HORAD}}',  parseFloat('{{this.[1].CANTIDAD_PARTICULAS}}')],
+          ['{{this.[0].FECHA_HORAD}}',  parseFloat('{{this.[0].CANTIDAD_PARTICULAS}}')]
         ]);
 
         var options = {
