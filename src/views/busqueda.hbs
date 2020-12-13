@@ -31,38 +31,48 @@
 
         });
 
-        var ct = 0;
+        var mod = new Array();
 
     </script>
     {{#each modulos}}
     <script>
-        ct++;
+        mod.push(parseInt('{{this.ID}}'));
     </script>
     {{/each}}
     <script>
         var datos = [['Fecha']];
-        for(let i = 0;  i < ct; i++){
+        for(let i = 0;  i < mod.length; i++){
 
-            datos[0][i+1] = `Modulo${i+1}`;
+            datos[0][i+1] = `Modulo${mod[i]}`;
 
         }
     </script>
     {{#each meds}}
     <script>
+
         datos[(parseInt('{{@index}}')) + 1] = ['{{this.FECHA_HORAD}}'];
-        for(let i = 0;  i < ct; i++){
+        for(let i = 0;  i < mod.length; i++){
 
             datos[(parseInt('{{@index}}')) + 1][i+1] = 0;
 
         }
-        datos[(parseInt('{{@index}}')) + 1][parseInt('{{this.ELEMENTOS_MEDICION_ID}}')] = parseFloat('{{this.CANTIDAD_PARTICULAS}}');
+        var pos = 0;
+
+        for(let i = 0;  i < mod.length; i++){
+
+            if(parseInt('{{this.ELEMENTOS_MEDICION_ID}}')==mod[i]){
+                pos = i+1;
+            }
+
+        }
+        datos[(parseInt('{{@index}}')) + 1][pos] = parseFloat('{{this.CANTIDAD_PARTICULAS}}');
        
     </script>
     {{/each}}
 
     <script>
 
-        console.log(ct);
+        console.log(datos);
         google.charts.load('current', { 'packages': ['corechart'] });
 
         google.charts.setOnLoadCallback(drawChart);
